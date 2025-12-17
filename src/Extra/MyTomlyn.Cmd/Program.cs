@@ -1,28 +1,18 @@
 using Tomlyn;
+using Tomlyn.Model;
 using MyTomlyn.Cmd;
 
 // Read the TOML file
 var tomlContent = File.ReadAllText("Resources/appSettings.toml");
 
 // Parse to TomlTable using Toml.ToModel<T> and convert to MySettings
+var options = new TomlModelOptions { IgnoreMissingProperties = true };
+var mySettings = Toml.ToModel<MySettings>(tomlContent, options: options);
 
-/*
- *Tomlyn.TomlException
-  HResult=0x80131500
-  Message=(12,2) : error : Unable to set the property host1 on object type MyTomlyn.Cmd.MySettings.
-(16,2) : error : Unable to set the property host2 on object type MyTomlyn.Cmd.MySettings.
-
-  Source=Tomlyn
-  StackTrace:
-   at Tomlyn.Toml.ToModel[T](DocumentSyntax syntax, TomlModelOptions options) in D:\esv\src\github\xoofx\Tomlyn\src\Tomlyn\Toml.cs:line 207
-   at Tomlyn.Toml.ToModel[T](String text, String sourcePath, TomlModelOptions options) in D:\esv\src\github\xoofx\Tomlyn\src\Tomlyn\Toml.cs:line 158
-   at Program.<Main>$(String[] args) in D:\esv\src\github\xoofx\Tomlyn\src\Extra\MyTomlyn.Cmd\Program.cs:line 8
- 
- */
-var mySettings = Toml.ToModel<MySettings>(tomlContent);
+var mySettings2 = Toml.ToModel<Dictionary<string, HostModel>>(tomlContent, options: options);
 
 
-var tomlTable = Toml.ToModel<Tomlyn.Model.TomlTable>(tomlContent);
+var tomlTable = Toml.ToModel<TomlTable>(tomlContent);
 var settings = MySettings.FromTomlTable(tomlTable);
 
 // Demonstrate accessing settings

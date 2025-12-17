@@ -44,10 +44,10 @@ public class MySettings
             {
                 var hostModel = new HostModel();
                 
-                if (hostTable.TryGetValue("oneDrive_folder", out var oneDriveFolder))
+                if (hostTable.TryGetValue("one_drive_folder", out var oneDriveFolder))
                     hostModel.OneDriveFolder = (string)oneDriveFolder;
                 
-                if (hostTable.TryGetValue("oneDrive_latest_version_folder", out var oneDriveLatestVersionFolder))
+                if (hostTable.TryGetValue("one_drive_latest_version_folder", out var oneDriveLatestVersionFolder))
                     hostModel.OneDriveLatestVersionFolder = (string)oneDriveLatestVersionFolder;
                 
                 settings.Hosts[key] = hostModel;
