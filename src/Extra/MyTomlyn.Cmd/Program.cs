@@ -1,44 +1,29 @@
 using Tomlyn;
-using Tomlyn.Model;
 using MyTomlyn.Cmd;
 
 // Read the TOML file
 var tomlContent = File.ReadAllText("Resources/appSettings.toml");
 
-// Parse to TomlTable first
-var tomlTable = Toml.ToModel(tomlContent);
+// Parse to TomlTable using Toml.ToModel<T> and convert to MySettings
 
-// Create settings instance
-var settings = new MySettings();
+/*
+ *Tomlyn.TomlException
+  HResult=0x80131500
+  Message=(12,2) : error : Unable to set the property host1 on object type MyTomlyn.Cmd.MySettings.
+(16,2) : error : Unable to set the property host2 on object type MyTomlyn.Cmd.MySettings.
 
-// Deserialize root-level properties
-if (tomlTable.TryGetValue("dev_db", out var devDb)) settings.DevDb = (string)devDb;
-if (tomlTable.TryGetValue("prod_db", out var prodDb)) settings.ProdDb = (string)prodDb;
-if (tomlTable.TryGetValue("dev_db_server", out var devDbServer)) settings.DevDbServer = (string)devDbServer;
-if (tomlTable.TryGetValue("prod_db_server", out var prodDbServer)) settings.ProdDbServer = (string)prodDbServer;
-if (tomlTable.TryGetValue("sql_backup_directory", out var sqlBackupDirectory)) settings.SqlBackupDirectory = (string)sqlBackupDirectory;
-if (tomlTable.TryGetValue("sql_backup_share", out var sqlBackupShare)) settings.SqlBackupShare = (string)sqlBackupShare;
-if (tomlTable.TryGetValue("backup_dev_file", out var backupDevFile)) settings.BackupDevFile = (string)backupDevFile;
-if (tomlTable.TryGetValue("backup_prod_file", out var backupProdFile)) settings.BackupProdFile = (string)backupProdFile;
-if (tomlTable.TryGetValue("dev_db_file", out var devDbFile)) settings.DevDbFile = (string)devDbFile;
-if (tomlTable.TryGetValue("dev_log_file", out var devLogFile)) settings.DevLogFile = (string)devLogFile;
+  Source=Tomlyn
+  StackTrace:
+   at Tomlyn.Toml.ToModel[T](DocumentSyntax syntax, TomlModelOptions options) in D:\esv\src\github\xoofx\Tomlyn\src\Tomlyn\Toml.cs:line 207
+   at Tomlyn.Toml.ToModel[T](String text, String sourcePath, TomlModelOptions options) in D:\esv\src\github\xoofx\Tomlyn\src\Tomlyn\Toml.cs:line 158
+   at Program.<Main>$(String[] args) in D:\esv\src\github\xoofx\Tomlyn\src\Extra\MyTomlyn.Cmd\Program.cs:line 8
+ 
+ */
+var mySettings = Toml.ToModel<MySettings>(tomlContent);
 
-// Deserialize host configurations into Dictionary
-foreach (var key in tomlTable.Keys)
-{
-    if (tomlTable[key] is TomlTable hostTable && (key.StartsWith("host") || key.Contains("host")))
-    {
-        var hostModel = new HostModel();
-        
-        if (hostTable.TryGetValue("oneDrive_folder", out var oneDriveFolder))
-            hostModel.OneDriveFolder = (string)oneDriveFolder;
-        
-        if (hostTable.TryGetValue("oneDrive_latest_version_folder", out var oneDriveLatestVersionFolder))
-            hostModel.OneDriveLatestVersionFolder = (string)oneDriveLatestVersionFolder;
-        
-        settings.Hosts[key] = hostModel;
-    }
-}
+
+var tomlTable = Toml.ToModel<Tomlyn.Model.TomlTable>(tomlContent);
+var settings = MySettings.FromTomlTable(tomlTable);
 
 // Demonstrate accessing settings
 Console.WriteLine($"Dev DB: {settings.DevDb}");
