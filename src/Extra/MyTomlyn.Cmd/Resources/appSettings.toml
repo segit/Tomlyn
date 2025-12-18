@@ -9,10 +9,11 @@ backup_prod_file =	"backup_prod_file"
 dev_db_file	= "dev_db_file"
 dev_log_file = "dev_log_file"
 
-[hosts1]
+[hosts]
+[[hosts.hosts1]]
 one_drive_folder = "oneDrive_folder"
 one_drive_latest_version_folder = "oneDrive_latest_version_folder"
 
-[host2]
+[[hosts.host2]]
 one_drive_folder = "one_drive_folder"
 one_drive_latest_version_folder = "one_drive_latest_version_folder"
