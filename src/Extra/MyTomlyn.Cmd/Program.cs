@@ -3,11 +3,11 @@ using Tomlyn.Model;
 using MyTomlyn.Cmd;
 
 
-var vt = Environment.GetEnvironmentVariable("vt");
-ArgumentException.ThrowIfNullOrWhiteSpace(vt);
+//var vt = Environment.GetEnvironmentVariable("vt");
+//ArgumentException.ThrowIfNullOrWhiteSpace(vt);
 
-var path = Path.GetFullPath($"{vt}/Backup_Scripts/w11_move_config.toml");
-var tomlContent1 = File.ReadAllText(path);
+//var path = Path.GetFullPath($"{vt}/Backup_Scripts/w11_move_config.toml");
+//var tomlContent1 = File.ReadAllText(path);
 
 // Read the TOML file
 var tomlContent = File.ReadAllText("Resources/appSettings.toml");
@@ -15,14 +15,14 @@ var tomlContent = File.ReadAllText("Resources/appSettings.toml");
 // Parse to TomlTable using Toml.ToModel<T> and convert to MySettings
 var options = new TomlModelOptions { IgnoreMissingProperties = true };
 
-var mySettings = Toml.ToModel<MySettings>(tomlContent, options: options);
+var settings = Toml.ToModel<MySettings>(tomlContent, options: options);
 
-options.GetPropertyName = TomlModelOptionsProvider.GetPropertyNameOnlyForDictionary;
-var mySettings2 = Toml.ToModel<Dictionary<string, HostModel>>(tomlContent, options: options);
+//options.GetPropertyName = TomlModelOptionsProvider.GetPropertyNameOnlyForDictionary;
+//var mySettings2 = Toml.ToModel<Dictionary<string, HostModel>>(tomlContent, options: options);
 
 
-var tomlTable = Toml.ToModel<TomlTable>(tomlContent);
-var settings = MySettings.FromTomlTable(tomlTable);
+//var tomlTable = Toml.ToModel<TomlTable>(tomlContent);
+//var settings = MySettings.FromTomlTable(tomlTable);
 
 // Demonstrate accessing settings
 Console.WriteLine($"Dev DB: {settings.DevDb}");
@@ -36,7 +36,7 @@ if (settings.Hosts.TryGetValue("host1", out var host1))
     Console.WriteLine($"Host1 - OneDrive Latest Version Folder: {host1.OneDriveLatestVersionFolder}");
 }
 
-if (settings.Hosts.TryGetValue("host2", out var host2))
+if (settings.Hosts.TryGetValue("Host2", out var host2))
 {
     Console.WriteLine($"\nHost2 - OneDrive Folder: {host2.OneDriveFolder}");
     Console.WriteLine($"Host2 - OneDrive Latest Version Folder: {host2.OneDriveLatestVersionFolder}");

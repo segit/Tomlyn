@@ -16,7 +16,7 @@ public class MySettings
     public string DevLogFile { get; set; } = string.Empty;
     
     // Dictionary for dynamic host configurations
-    public Dictionary<string, HostModel> Hosts { get; set; } = new();
+    public Dictionary<string, HostModel> Hosts { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// Creates MySettings from a TomlTable, extracting host tables into the Hosts dictionary
