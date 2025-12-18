@@ -14,16 +14,10 @@ var tomlContent = File.ReadAllText("Resources/appSettings.toml");
 
 // Parse to TomlTable using Toml.ToModel<T> and convert to MySettings
 var options = new TomlModelOptions { IgnoreMissingProperties = true };
+
 var mySettings = Toml.ToModel<MySettings>(tomlContent, options: options);
 
-/*
- * TODO:
- * in the separate file TomlModelOptionsProvider.cs 
- * implement delegate which will return property name only if it is of type Dictionary<string,HostModel>
- * assing that delagate here
- */
-//options.GetPropertyName = 
-
+options.GetPropertyName = TomlModelOptionsProvider.GetPropertyNameOnlyForDictionary;
 var mySettings2 = Toml.ToModel<Dictionary<string, HostModel>>(tomlContent, options: options);
 
 
